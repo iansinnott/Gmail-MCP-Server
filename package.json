@@ -8,6 +8,7 @@
     "gmail-mcp": "./dist/index.js"
   },
   "scripts": {
+    "prepare": "bun build src/index.ts --outdir ./dist --target node",
     "build": "bun build src/index.ts --outdir ./dist --target node",
     "start": "bun run dist/index.js",
     "auth": "bun run dist/index.js auth",
