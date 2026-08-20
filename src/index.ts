@@ -503,9 +503,20 @@ async function main() {
     }
 
     // Server implementation
+    // AIDEV-NOTE: `capabilities` belongs in the SECOND Server() argument
+    // (options), NOT the first (serverInfo). Putting it in the first arg is
+    // silently accepted — serverInfo is passed through to the client verbatim —
+    // so nothing complains until you run against @modelcontextprotocol/sdk
+    // >=1.26, which asserts `this._capabilities.tools` inside
+    // setRequestHandler(ListToolsRequestSchema) and kills the process at
+    // startup with "Server does not support tools (required for tools/list)".
+    // On the 0.4.0 SDK this package still pins, capabilities are derived from
+    // the registered handlers and this argument is ignored entirely, which is
+    // why the bug stayed invisible here for months. See GENT-1069.
     const server = new Server({
         name: "gmail",
         version: "1.0.0",
+    }, {
         capabilities: {
             tools: {},
         },
